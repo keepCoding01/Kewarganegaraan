@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentasi Kelompok 1 - Universitas Mikroskil</title>
+    <!-- Tailwind CSS untuk tata letak modern -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts untuk Tipografi Estetik & Ramah Anak Muda -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome untuk Ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0f172a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 10px;
+            overflow: hidden;
+        }
+
+        .slide-title-font {
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        /* Slide Container Responsif Skala Maksimal */
+        .slide-wrapper {
+            width: 100%;
+            max-width: 1120px; /* Ukuran dilebarkan agar lebih megah */
+            aspect-ratio: 16 / 9;
+            position: relative;
+            border-radius: 28px;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6);
+            border: 5px solid rgba(255, 255, 255, 0.18);
+            overflow: hidden;
+            background: #ffffff;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slide-canvas {
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 4% 6%;
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .slide-canvas.active {
+            display: flex;
+            animation: slideIn 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideIn {
+            0% { opacity: 0; transform: scale(0.96) translateY(15px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* Balon Kata Maskot */
+        .chat-bubble {
+            background: #ffffff;
+            border: 2.5px solid #1e3a8a;
+            border-radius: 16px;
+            position: relative;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        .chat-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: 35px;
+            border-width: 10px 10px 0;
+            border-style: solid;
+            border-color: #ffffff transparent;
+            display: block;
+            width: 0;
+        }
+        .chat-bubble::before {
+            content: '';
+            position: absolute;
+            bottom: -13px;
+            right: 34px;
+            border-width: 12px 12px 0;
+            border-style: solid;
+            border-color: #1e3a8a transparent;
+            display: block;
+            width: 0;
+            z-index: -1;
+        }
+
+        /* Custom Card dengan efek Soft Shadow */
+        .canva-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2.5px solid #1e3a8a;
+            border-radius: 20px;
+            box-shadow: 0 8px 16px rgba(30, 58, 138, 0.12);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .canva-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 16px 28px rgba(239, 68, 68, 0.25);
+        }
+
+        /* Animasi Melayang Halus (Hover/Float) untuk Maskot */
+        @keyframes floatEffect {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(1.5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        .floating-maskot {
+            animation: floatEffect 3s ease-in-out infinite;
+        }
+
+        /* Animasi Sayap Garuda Mengepak */
+        @keyframes flapLeft {
+            0% { transform: rotate(0deg); }
+            50% { transform: rotate(-10deg); }
+            100% { transform: rotate(0deg); }
+        }
+        @keyframes flapRight {
+            0% { transform: rotate(0deg); }
+            50% { transform: rotate(10deg); }
+            100% { transform: rotate(0deg); }
+        }
+        .wing-left {
+            animation: flapLeft 1.2s ease-in-out infinite;
+            transform-origin: 30px 50px;
+        }
+        .wing-right {
+            animation: flapRight 1.2s ease-in-out infinite;
+            transform-origin: 120px 50px;
+        }
+
+        /* Animasi Koin IDR Berputar */
+        @keyframes spinCoin {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+        .spinning-coin {
+            animation: spinCoin 4s linear infinite;
+            transform-style: preserve-3d;
+        }
+
+        /* Animasi Bendera Merah Putih Berkibar */
+        @keyframes waveFlag {
+            0% { transform: skewY(0deg) scaleY(1); }
+            50% { transform: skewY(1.5deg) scaleY(1.02); }
+            100% { transform: skewY(0deg) scaleY(1); }
+        }
+        .waving-flag {
+            animation: waveFlag 2.5s ease-in-out infinite;
+        }
+
+        /* Indikator Slide Aktif */
+        .dot-indicator {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.35);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .dot-indicator.active {
+            background: #ef4444;
+            transform: scale(1.4);
+            box-shadow: 0 0 10px #ef4444;
+        }
+    </style>
+</head>
+<body>
+
+    <svg style="display: none;">
+        <!-- Maskot Smart Garuda dengan Wing Flapping Animation -->
+        <g id="smart-garuda">
+            <!-- Sayap Kiri -->
+            <g class="wing-left">
+                <path d="M 30,50 C 5,40 2,75 15,95 C 10,75 20,65 30,55" fill="#f59e0b" stroke="#b45309" stroke-width="2" />
+                <path d="M 28,60 C 8,50 5,85 18,105 C 13,85 22,75 28,65" fill="#ef4444" stroke="#b91c1c" stroke-width="1.5" />
+            </g>
+            <!-- Sayap Kanan -->
+            <g class="wing-right">
+                <path d="M 120,50 C 145,40 148,75 135,95 C 140,75 130,65 120,55" fill="#f59e0b" stroke="#b45309" stroke-width="2" />
+                <path d="M 122,60 C 142,50 145,85 132,105 C 137,85 128,75 122,65" fill="#ef4444" stroke="#b91c1c" stroke-width="1.5" />
+            </g>
+            <!-- Ekor -->
+            <path d="M 65,115 L 75,140 L 85,115 Z" fill="#ef4444" stroke="#b91c1c" stroke-width="2.5" />
+            <path d="M 55,115 L 75,135 L 95,115 Z" fill="#f59e0b" stroke="#b45309" stroke-width="2.5" />
+            <!-- Badan Garuda -->
+            <circle cx="75" cy="75" r="38" fill="#f59e0b" stroke="#b45309" stroke-width="3" />
+            <!-- Dada Putih -->
+            <path d="M 50,75 C 50,55 100,55 100,75 C 100,100 50,100 50,75" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+            <!-- Perisai Pancasila -->
+            <path d="M 63,65 L 87,65 L 87,80 C 87,90 75,98 75,98 C 75,98 63,90 63,80 Z" fill="#b91c1c" stroke="#7f1d1d" stroke-width="1.5" />
+            <path d="M 75,65 L 75,98" stroke="#ffffff" stroke-width="1.5" />
+            <circle cx="75" cy="77" r="4" fill="#fbbf24" />
+            <!-- Kepala & Jambul -->
+            <path d="M 75,37 C 65,20 85,20 75,37" fill="#f59e0b" stroke="#b45309" stroke-width="2" />
+            <circle cx="75" cy="40" r="14" fill="#f59e0b" stroke="#b45309" stroke-width="3" />
+            <!-- Paruh Emas -->
+            <path d="M 70,42 L 80,42 L 75,52 Z" fill="#fbbf24" stroke="#d97706" stroke-width="2.5" />
+            <!-- Kacamata Pintar Bulat -->
+            <circle cx="68" cy="38" r="7" fill="none" stroke="#1e3a8a" stroke-width="2.5" />
+            <circle cx="82" cy="38" r="7" fill="none" stroke="#1e3a8a" stroke-width="2.5" />
+            <line x1="71" y1="38" x2="79" y2="38" stroke="#1e3a8a" stroke-width="2.5" />
+            <!-- Mata Imut -->
+            <circle cx="68" cy="38" r="2" fill="#000000" />
+            <circle cx="82" cy="38" r="2" fill="#000000" />
+            <!-- Pipi Merona -->
+            <circle cx="60" cy="44" r="3" fill="#f43f5e" opacity="0.6" />
+            <circle cx="90" cy="44" r="3" fill="#f43f5e" opacity="0.6" />
+        </g>
+    </svg>
+
+    <!-- CONTAINER UTAMA SLIDE (16:9) -->
+    <div class="slide-wrapper">
+
+        <!-- ==================== SLIDE 1: COVER PRESENTASI (VIBES NUSANTARA INDAH) ==================== -->
+        <div class="slide-canvas active" id="slide1" style="background: linear-gradient(to bottom, #bae6fd 0%, #e0f2fe 60%, #f0fdf4 100%);">
+            <!-- Elemen Pemandangan Gunung & Sawah (SVG Background) -->
+            <div class="absolute inset-0 pointer-events-none z-0">
+                <svg class="w-full h-full" viewBox="0 0 1000 562" preserveAspectRatio="none">
+                    <!-- Awan-Awan Cantik -->
+                    <path d="M 80,120 Q 95,95 120,105 Q 145,90 170,105 Q 195,95 200,120 Z" fill="#ffffff" opacity="0.9"/>
+                    <path d="M 800,80 Q 815,55 840,65 Q 865,50 890,65 Q 915,55 920,80 Z" fill="#ffffff" opacity="0.9"/>
+                    <!-- Gunung Vektor -->
+                    <path d="M 120,350 L 350,150 L 580,350 Z" fill="#a5f3fc" opacity="0.6" />
+                    <path d="M 230,370 L 500,130 L 780,370 Z" fill="#38bdf8" opacity="0.7" />
+                    <path d="M -40,430 L 200,190 L 440,430 Z" fill="#0284c7" opacity="0.5" />
+                    <!-- Bukit-Bukit Sawah Hijau Berundak -->
+                    <path d="M -20,410 Q 150,370 300,410 T 700,390 T 1020,410 L 1020,562 L -20,562 Z" fill="#4ade80" />
+                    <path d="M -20,450 Q 230,410 460,450 T 920,430 T 1020,450 L 1020,562 L -20,562 Z" fill="#22c55e" />
+                    <path d="M -20,490 Q 300,460 610,490 T 1020,490 L 1020,562 L -20,562 Z" fill="#16a34a" />
+                </svg>
+            </div>
+
+            <!-- Header Bendera Pita Waving & Kampus Logo -->
+            <div class="relative z-10 w-full flex justify-between items-center">
+                <span class="slide-title-font text-[14px] font-bold text-red-600 bg-white/95 px-4 py-1.5 rounded-full border-2 border-red-600 shadow-sm waving-flag">
+                    <i class="fa-solid fa-flag text-red-600 mr-2 animate-bounce"></i> KELOMPOK 1 • IFC SORE
+                </span>
+            </div>
+
+            <!-- Konten Utama (Berisi Judul Terfokus & Lokasi) -->
+            <div class="relative z-10 text-center my-auto px-6">
+                <div class="inline-block bg-amber-400 text-slate-900 slide-title-font font-bold text-[11px] px-4 py-1 rounded-full border-2 border-slate-900 shadow-sm transform -rotate-2 mb-2">
+                    PKN - KEWARGANEGARAAN
+                </div>
+                <h1 class="slide-title-font text-2xl lg:text-3xl font-extrabold text-blue-900 leading-tight drop-shadow-sm">
+                    Wawasan Nusantara di Pasar Global:<br>
+                    <span class="text-red-600">Menakar Penguatan Nilai Tukar Rupiah (IDR)</span>
+                </h1>
+                <p class="text-[12px] font-bold text-slate-700 mt-2 max-w-2xl mx-auto bg-white/85 p-2 rounded-xl border-2 border-blue-900 shadow-sm">
+                    Instrumen Penegasan Jati Diri Bangsa dalam Pergaulan Dunia pada Mahasiswa Universitas Mikroskil
+                </p>
+            </div>
+
+            <!-- Daftar Anggota Tim (7 Orang Sesuai Request) -->
+            <div class="relative z-10 grid grid-cols-4 gap-2 bg-white/95 p-2.5 rounded-2xl border-2 border-blue-900 shadow-md">
+                <div class="p-1 border-r border-slate-200">
+                    <span class="text-[9px] font-bold text-red-600 uppercase block">Ketua Kelompok</span>
+                    <span class="text-[11px] font-extrabold text-slate-800">M. Refdi Pasaribu</span>
+                    <span class="text-[9px] text-slate-500 block">NIM: 231110267</span>
+                </div>
+                <div class="p-1 border-r border-slate-200">
+                    <span class="text-[9px] font-bold text-blue-900 uppercase block">Anggota Kelompok</span>
+                    <span class="text-[10px] font-extrabold text-slate-800 block">Alberto William<span class="text-[8px] font-normal text-slate-500">(231110810)</span></span>
+                    <span class="text-[10px] font-extrabold text-slate-800 block">Evelyn <span class="text-[8px] font-normal text-slate-500">(231111919)</span></span>
+                </div>
+                <div class="p-1 border-r border-slate-200">
+                    <span class="text-[9px] font-bold text-blue-900 uppercase block">Anggota Kelompok</span>
+                    <span class="text-[10px] font-extrabold text-slate-800 block">Sintia Kristiwanta Naibaho<span class="text-[8px] font-normal text-slate-500">(231112097)</span></span>
+                    <span class="text-[10px] font-extrabold text-slate-800 block">Tasya Syafriza<span class="text-[8px] font-normal text-slate-500">(231112518)</span></span>
+                </div>
+                <div class="p-1">
+                    <span class="text-[9px] font-bold text-blue-900 uppercase block">Anggota Kelompok</span>
+                    <span class="text-[10px] font-extrabold text-slate-800 block">Vedika Susmita Anand<span class="text-[8px] font-normal text-slate-500">(231112522)</span></span>
+                    <span class="text-[10px] font-extrabold text-slate-800 block">Zein Ath Thoriq Badres<span class="text-[8px] font-normal text-slate-500">(231110299)</span></span>
+                </div>
+            </div>
+
+            <!-- Footer Cover -->
+            <div class="relative z-10 flex justify-between items-center text-[10px] text-slate-600 font-bold border-t border-slate-300/50 pt-2">
+                <span>FAKULTAS INFORMATIKA - UNIVERSITAS MIKROSKIL</span>
+                <span>TAHUN AKADEMIK 2026</span>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 2: BAB I PENDAHULUAN (VIBES RUANG KELAS) ==================== -->
+        <div class="slide-canvas" id="slide2" style="background: linear-gradient(to bottom, #fed7aa 0%, #ffedd5 60%, #ffedd5 100%);">
+            <!-- Background Ruang Kelas (Blackboard) -->
+            <div class="absolute inset-0 pointer-events-none z-0">
+                <svg class="w-full h-full" viewBox="0 0 1000 562" preserveAspectRatio="none">
+                    <!-- Blackboard Raksasa -->
+                    <rect x="60" y="60" width="880" height="330" rx="15" fill="#14532d" stroke="#78350f" stroke-width="12" />
+                    <rect x="70" y="70" width="860" height="310" rx="8" fill="none" stroke="#fef08a" stroke-width="2" stroke-dasharray="6,6" />
+                    <!-- Lantai Kelas Kayu -->
+                    <rect x="0" y="420" width="1000" height="142" fill="#d97706" opacity="0.8" />
+                    <line x1="0" y1="460" x2="1000" y2="460" stroke="#78350f" stroke-width="2" />
+                    <line x1="0" y1="510" x2="1000" y2="510" stroke="#78350f" stroke-width="2" />
+                </svg>
+            </div>
+
+            <!-- Dekorasi Bendera Merah Putih Gantung di Atas Papan Tulis -->
+            <div class="absolute top-[72px] left-[80px] right-[80px] flex justify-between px-3 pointer-events-none z-20">
+                <div class="w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[22px] border-t-red-600 drop-shadow"></div>
+                <div class="w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[22px] border-t-white drop-shadow"></div>
+                <div class="w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[22px] border-t-red-600 drop-shadow"></div>
+                <div class="w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[22px] border-t-white drop-shadow"></div>
+                <div class="w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[22px] border-t-red-600 drop-shadow"></div>
+                <div class="w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[22px] border-t-white drop-shadow"></div>
+                <div class="w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[22px] border-t-red-600 drop-shadow"></div>
+                <div class="w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[22px] border-t-white drop-shadow"></div>
+                <div class="w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[22px] border-t-red-600 drop-shadow"></div>
+                <div class="w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[22px] border-t-white drop-shadow"></div>
+                <div class="w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[22px] border-t-red-600 drop-shadow"></div>
+                <div class="w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[22px] border-t-white drop-shadow"></div>
+                <div class="w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[22px] border-t-red-600 drop-shadow"></div>
+                <div class="w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[22px] border-t-white drop-shadow"></div>
+            </div>
+
+            <!-- Bagan Konseptual Kapur Tulis (Chalkboard Mind-map) -->
+            <div class="absolute top-[90px] left-1/2 transform -translate-x-1/2 w-[720px] flex justify-between items-center px-4 pointer-events-none z-10 text-white/50 slide-title-font border border-dashed border-white/20 rounded-xl py-2 px-3 bg-white/5 backdrop-blur-[0.5px]">
+                <div class="text-center">
+                    <span class="block border border-white/40 rounded px-2.5 py-0.5 text-[11px] font-bold text-yellow-300/80">Wawasan Nusantara</span>
+                    <span class="text-[8.5px] opacity-80 font-bold text-slate-300">Asas Geopolitik NKRI</span>
+                </div>
+                
+                <div class="flex-1 flex flex-col items-center justify-center mx-4">
+                    <span class="text-[8px] uppercase tracking-wider font-extrabold text-red-400/80">Filter Globalisasi</span>
+                    <div class="w-full flex items-center justify-center gap-1.5">
+                        <div class="h-[1.5px] bg-white/30 flex-1 relative">
+                            <div class="absolute right-0 top-1/2 transform -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-white/60"></div>
+                        </div>
+                        <i class="fa-solid fa-arrows-spin text-[10px] animate-spin text-amber-300/60"></i>
+                        <div class="h-[1.5px] bg-white/30 flex-1 relative">
+                            <div class="absolute left-0 top-1/2 transform -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-white/60"></div>
+                        </div>
+                    </div>
+                    <span class="text-[8px] font-bold text-sky-300/80">Integrasi Ekonomi Digital</span>
+                </div>
+
+                <div class="text-center">
+                    <span class="block border border-white/40 rounded px-2.5 py-0.5 text-[11px] font-bold text-yellow-300/80">Stabilitas Rupiah (IDR)</span>
+                    <span class="text-[8.5px] opacity-80 font-bold text-slate-300">Ketahanan Moneter Nasional</span>
+                </div>
+            </div>
+
+            <div class="relative z-10 flex justify-between items-center text-white">
+                <span class="slide-title-font text-[16px] font-bold bg-amber-500 border-2 border-white px-4 py-1 rounded-full shadow-sm">
+                    PENDAHULUAN
+                </span>
+                <span class="text-[11px] font-semibold bg-red-600 text-white px-3 py-1 rounded-full shadow-sm">Slide 2 / 10</span>
+            </div>
+
+            <!-- Isi Konten di dalam Blackboard (Dinaikkan sedikit agar tidak bertubrukan) -->
+            <div class="relative z-10 grid grid-cols-2 gap-8 px-10 mt-[135px] mb-auto text-white">
+                <div class="flex flex-col justify-center">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="bg-red-600 p-1.5 rounded-lg text-sm border border-white"><i class="fa-solid fa-earth-americas"></i></span>
+                        <h2 class="slide-title-font text-[15px] font-bold text-yellow-300">Dinamika Makro-Geopolitik</h2>
+                    </div>
+                    <p class="text-[10.5px] leading-relaxed text-slate-100">
+                        Kedaulatan bangsa modern tidak hanya diukur dari batas wilayah fisik. Dalam lalu lintas siber bebas, ketahanan moneter nasional yang tercermin dari stabilitas nilai tukar Rupiah (IDR) adalah cermin martabat sejati bangsa kita.
+                    </p>
+                </div>
+
+                <div class="flex flex-col justify-center border-l-2 border-white/20 pl-6">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="bg-blue-600 p-1.5 rounded-lg text-sm border border-white"><i class="fa-solid fa-graduation-cap"></i></span>
+                        <h2 class="slide-title-font text-[15px] font-bold text-yellow-300">Urgensi Akademis Kampus</h2>
+                    </div>
+                    <p class="text-[10.5px] leading-relaxed text-slate-100">
+                        Mahasiswa Universitas Mikroskil dengan bekal wawasan teknologi informasi berkedudukan strategis dalam lalu lintas finansial digital. Kesadaran ekonomi siber generasi muda adalah jaminan kedaulatan finansial NKRI di masa depan.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Maskot & Penjelas -->
+            <div class="relative z-10 flex justify-between items-end">
+                <div class="flex items-center gap-3">
+                    <div class="w-16 h-16 floating-maskot">
+                        <svg viewBox="0 0 150 150" class="w-full h-full">
+                            <use href="#smart-garuda" />
+                        </svg>
+                    </div>
+                    <div class="chat-bubble px-3 py-1.5 text-[9px] font-bold text-blue-900 border-2 border-blue-900 max-w-[280px]">
+                        Smart Garuda: "Ketahanan nasional modern itu berakar dari kesadaran transaksi dompet digital kita!"
+                    </div>
+                </div>
+                <span class="text-[9px] text-yellow-100 font-bold">Slide Presentasi Kelompok 1 - IFC SORE</span>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 3: BAB I RUMUSAN MASALAH (VIBES CANDI BENTAR / PURA) ==================== -->
+        <div class="slide-canvas" id="slide3" style="background: linear-gradient(to bottom, #ffedd5 0%, #fed7aa 60%, #fdba74 100%);">
+            <!-- Background Vektor Gapura di Sisi Kiri & Kanan -->
+            <div class="absolute inset-0 pointer-events-none z-0">
+                <svg class="w-full h-full" viewBox="0 0 1000 562" preserveAspectRatio="none">
+                    <!-- Gapura Kiri (Candi Bentar) -->
+                    <g fill="#7c2d12" stroke="#451a03" stroke-width="2">
+                        <rect x="0" y="150" width="80" height="412" />
+                        <rect x="8" y="190" width="80" height="25" />
+                        <path d="M 80,150 L 0,110 L 0,150 Z" />
+                        <rect x="25" y="230" width="30" height="180" fill="#9a3412" />
+                        <circle cx="40" cy="270" r="8" fill="#fbbf24" />
+                    </g>
+                    <!-- Gapura Kanan -->
+                    <g fill="#7c2d12" stroke="#451a03" stroke-width="2">
+                        <rect x="920" y="150" width="80" height="412" />
+                        <rect x="912" y="190" width="80" height="25" />
+                        <path d="M 920,150 L 1000,110 L 1000,150 Z" />
+                        <rect x="945" y="230" width="30" height="180" fill="#9a3412" />
+                        <circle cx="960" cy="270" r="8" fill="#fbbf24" />
+                    </g>
+                </svg>
+            </div>
+
+            <div class="relative z-10 flex justify-between items-center text-slate-800">
+                <span class="slide-title-font text-[16px] font-bold bg-red-600 text-white px-4 py-1 rounded-full shadow-sm">
+                    POKOK PERMASALAHAN & TARGET
+                </span>
+                <span class="text-[11px] font-semibold bg-blue-950 text-white px-3 py-1 rounded-full shadow-sm">Slide 3 / 10</span>
+            </div>
+
+            <!-- 2 Rumusan Masalah Utama (Linear & Kuat) -->
+            <div class="relative z-10 grid grid-cols-2 gap-6 px-12 my-auto">
+                <div class="canva-card p-4 hover:scale-105 transform transition duration-300 cursor-pointer" onclick="playBeep(250, 0.1)">
+                    <span class="bg-red-500 text-white font-black text-sm w-8 h-8 flex items-center justify-center rounded-full border-2 border-slate-950 shadow-sm mb-2">01</span>
+                    <h3 class="slide-title-font text-[14px] font-bold text-blue-900 mb-1">Dimensi Persepsi Geopolitik</h3>
+                    <p class="text-[10px] leading-relaxed text-slate-700 font-medium">
+                        Sejauh mana penguatan Rupiah (IDR) dipahami mahasiswa Universitas Mikroskil sebagai instrumen riil penegasan identitas kebangsaan berbasis Wawasan Nusantara?
+                    </p>
+                </div>
+
+                <div class="canva-card p-4 hover:scale-105 transform transition duration-300 cursor-pointer" onclick="playBeep(280, 0.1)">
+                    <span class="bg-amber-500 text-slate-950 font-black text-sm w-8 h-8 flex items-center justify-center rounded-full border-2 border-slate-950 shadow-sm mb-2">02</span>
+                    <h3 class="slide-title-font text-[14px] font-bold text-blue-900 mb-1">Dimensi Praktik Transaksi</h3>
+                    <p class="text-[10px] leading-relaxed text-slate-700 font-medium">
+                        Bagaimana dinamika pasar siber internasional memengaruhi keputusan transaksi harian serta preferensi mahasiswa Universitas Mikroskil dalam memilih platform pembayaran berbasis Rupiah?
+                    </p>
+                </div>
+            </div>
+
+            <div class="relative z-10 flex justify-between items-end">
+                <div class="flex items-center gap-3">
+                    <div class="w-14 h-14 floating-maskot">
+                        <svg viewBox="0 0 150 150" class="w-full h-full">
+                            <use href="#smart-garuda" />
+                        </svg>
+                    </div>
+                    <div class="chat-bubble px-3 py-1 text-[9px] font-bold text-blue-900 border-2 border-blue-900 max-w-[280px]">
+                        Garuda: "Dua rumusan masalah ini harus kita jawab tuntas di simpulan nanti!"
+                    </div>
+                </div>
+                <span class="text-[9px] text-slate-700 font-bold">Universitas Mikroskil • IFC SORE</span>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 4: BAB II TINJAUAN PUSTAKA (ILUSTRASI BENTENG & LAUT) ==================== -->
+        <div class="slide-canvas" id="slide4" style="background: linear-gradient(to bottom, #bae6fd 0%, #38bdf8 70%, #0284c7 100%);">
+            <!-- Background Lautan Nusantara & Kapal Pinisi Vektor -->
+            <div class="absolute inset-0 pointer-events-none z-0">
+                <svg class="w-full h-full" viewBox="0 0 1000 562" preserveAspectRatio="none">
+                    <!-- Kepulauan Hijau -->
+                    <path d="M 50,350 Q 150,310 300,350 T 600,330 T 900,350 L 1020,562 L 0,562 Z" fill="#22c55e" opacity="0.4" />
+                    <!-- Ombak Laut Biru -->
+                    <path d="M 0,430 Q 250,400 500,430 T 1000,430 L 1000,562 L 0,562 Z" fill="#1d4ed8" />
+                    <path d="M 0,470 Q 300,445 600,470 T 1000,470 L 1000,562 L 0,562 Z" fill="#1e3a8a" />
+                    <!-- Kapal Layar Pinisi Vektor Imut -->
+                    <g transform="translate(720, 270) scale(0.7)">
+                        <path d="M 10,80 L 130,80 L 110,110 L 30,110 Z" fill="#78350f" stroke="#451a03" stroke-width="2" />
+                        <line x1="70" y1="20" x2="70" y2="80" stroke="#451a03" stroke-width="3" />
+                        <path d="M 70,20 C 50,30 40,60 70,75 Z" fill="#ef4444" />
+                        <path d="M 70,20 C 90,30 100,60 70,75 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+                    </g>
+                    <!-- Koin Rupiah Emas Berterbangan -->
+                    <g transform="translate(150, 150) scale(0.4)" class="spinning-coin">
+                        <ellipse cx="50" cy="50" rx="40" ry="40" fill="#fbbf24" stroke="#d97706" stroke-width="4" />
+                        <text x="35" y="60" font-family="'Fredoka', sans-serif" font-size="28" font-weight="bold" fill="#78350f">Rp</text>
+                    </g>
+                    <g transform="translate(50, 220) scale(0.25)" class="spinning-coin">
+                        <ellipse cx="50" cy="50" rx="40" ry="40" fill="#fbbf24" stroke="#d97706" stroke-width="4" />
+                        <text x="35" y="60" font-family="'Fredoka', sans-serif" font-size="28" font-weight="bold" fill="#78350f">Rp</text>
+                    </g>
+                </svg>
+            </div>
+
+            <div class="relative z-10 flex justify-between items-center text-white">
+                <span class="slide-title-font text-[16px] font-bold bg-blue-900 border-2 border-white px-4 py-1 rounded-full shadow-md">
+                    TINJAUAN TEORITIS
+                </span>
+                <span class="text-[11px] font-semibold bg-red-600 text-white px-3 py-1 rounded-full shadow-sm">Slide 4 / 10</span>
+            </div>
+
+            <!-- 3 Pilar Teori Kunci dengan detail interaktif -->
+            <div class="relative z-10 grid grid-cols-3 gap-4 px-4 my-auto">
+                <div class="canva-card p-4 cursor-pointer hover:bg-white" onclick="showTeoriDetail('Wawasan Nusantara', 'Tameng siber-ideologis yang mengintegrasikan persatuan segenap aspek kehidupan nasional, memproteksi eksistensi jati diri bangsa dari benturan globalisasi.')">
+                    <div class="text-2xl text-red-600 mb-1"><i class="fa-solid fa-shield-halved"></i></div>
+                    <h4 class="slide-title-font text-[13px] font-bold text-blue-950 mb-1">Wawasan Nusantara</h4>
+                    <p class="text-[9px] leading-relaxed text-slate-700 font-medium">
+                        Tameng siber-ideologis yang mengintegrasikan persatuan segenap aspek kehidupan nasional... <strong class="text-blue-900 block mt-1">Klik detail &raquo;</strong>
+                    </p>
+                </div>
+
+                <div class="canva-card p-4 cursor-pointer hover:bg-white" onclick="showTeoriDetail('Nilai Tukar Rupiah', 'Indikator makro moneter yang mencerminkan ketahanan ekonomi nasional. Dipengaruhi oleh BI Rate, laju inflasi, dan neraca perdagangan global.')">
+                    <div class="text-2xl text-amber-500 mb-1"><i class="fa-solid fa-chart-line"></i></div>
+                    <h4 class="slide-title-font text-[13px] font-bold text-blue-950 mb-1">Nilai Tukar Rupiah</h4>
+                    <p class="text-[9px] leading-relaxed text-slate-700 font-medium">
+                        Indikator makro moneter yang mencerminkan ketahanan ekonomi nasional... <strong class="text-blue-900 block mt-1">Klik detail &raquo;</strong>
+                    </p>
+                </div>
+
+                <div class="canva-card p-4 cursor-pointer hover:bg-white" onclick="showTeoriDetail('Korelasi Resiprokal', 'Konsumsi masif produk lokal akan mengurangi ketergantungan impor, menstabilkan neraca dagang, dan berdampak pada penguatan nilai Rupiah.')">
+                    <div class="text-2xl text-green-600 mb-1"><i class="fa-solid fa-repeat"></i></div>
+                    <h4 class="slide-title-font text-[13px] font-bold text-blue-950 mb-1">Korelasi Resiprokal</h4>
+                    <p class="text-[9px] leading-relaxed text-slate-700 font-medium">
+                        Konsumsi masif produk lokal akan mengurangi ketergantungan impor, menstabilkan neraca dagang... <strong class="text-blue-900 block mt-1">Klik detail &raquo;</strong>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Interactivity Display Panel -->
+            <div id="teoriDetailBox" class="relative z-10 mx-auto max-w-xl bg-white/95 border-2 border-blue-900 rounded-xl p-2 px-4 shadow text-center text-[10px] text-slate-800 font-bold hidden animate-pulse">
+                Pilih pilar teori di atas untuk detail ulasan kaffah.
+            </div>
+
+            <div class="relative z-10 flex justify-between items-end text-white">
+                <div class="flex items-center gap-3">
+                    <div class="w-14 h-14 floating-maskot">
+                        <svg viewBox="0 0 150 150" class="w-full h-full">
+                            <use href="#smart-garuda" />
+                        </svg>
+                    </div>
+                    <div class="chat-bubble px-3 py-1 text-[9px] font-bold text-blue-900 border-2 border-blue-900 max-w-[280px]">
+                        Garuda: "Kedaulatan ekonomi di laut dan udara kita harus sekuat samudra!"
+                    </div>
+                </div>
+                <span class="text-[9px] text-blue-50 font-bold">Makalah Kelompok 1 - 2026</span>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 5: BAB III METODOLOGI (VIBES RUANG LAB KOMPUTER) ==================== -->
+        <div class="slide-canvas" id="slide5" style="background: linear-gradient(to bottom, #e2e8f0 0%, #cbd5e1 60%, #94a3b8 100%);">
+            <!-- Workspace Vektor Desk -->
+            <div class="absolute inset-0 pointer-events-none z-0">
+                <svg class="w-full h-full" viewBox="0 0 1000 562" preserveAspectRatio="none">
+                    <!-- Meja Lab Vektor -->
+                    <rect x="0" y="450" width="1000" height="112" fill="#475569" />
+                    <rect x="0" y="435" width="1000" height="15" fill="#334155" />
+                    <!-- Komputer iMac style Kiri -->
+                    <g transform="translate(100, 320) scale(0.7)">
+                        <rect x="10" y="10" width="120" height="80" rx="8" fill="#94a3b8" stroke="#1e293b" stroke-width="4" />
+                        <rect x="15" y="15" width="110" height="60" rx="3" fill="#ffffff" />
+                        <rect x="50" y="90" width="40" height="50" fill="#64748b" stroke="#1e293b" stroke-width="3" />
+                        <ellipse cx="70" cy="140" rx="30" ry="8" fill="#475569" stroke="#1e293b" stroke-width="3" />
+                    </g>
+                    <!-- Dokumen Grafik Kanan -->
+                    <g transform="translate(820, 320) scale(0.8)">
+                        <rect x="0" y="0" width="80" height="110" rx="5" fill="#ffffff" stroke="#1e293b" stroke-width="4" />
+                        <rect x="15" y="60" width="12" height="35" fill="#ef4444" />
+                        <rect x="34" y="40" width="12" height="55" fill="#fbbf24" />
+                        <rect x="53" y="20" width="12" height="75" fill="#3b82f6" />
+                    </g>
+                </svg>
+            </div>
+
+            <div class="relative z-10 flex justify-between items-center text-slate-800">
+                <span class="slide-title-font text-[16px] font-bold bg-amber-500 text-slate-950 border-2 border-slate-950 px-4 py-1 rounded-full shadow-sm">
+                    STRATEGI & METODOLOGI RISET
+                </span>
+                <span class="text-[11px] font-semibold bg-blue-950 text-white px-3 py-1 rounded-full shadow-sm">Slide 5 / 10</span>
+            </div>
+
+            <!-- Detail Metode 4 Poin Utama -->
+            <div class="relative z-10 grid grid-cols-4 gap-3 px-2 my-auto">
+                <div class="canva-card p-3">
+                    <span class="text-[9px] font-black bg-blue-100 text-blue-900 px-2 py-0.5 rounded-full border border-blue-900">01</span>
+                    <h4 class="slide-title-font text-[11px] font-bold text-blue-950 mt-1 mb-0.5">Kuantitatif Deskriptif</h4>
+                    <p class="text-[8.5px] leading-relaxed text-slate-600 font-semibold">
+                        Penelitian kuantitatif deskriptif memproses data numerik dengan analisis statistik untuk hasil objektif.
+                    </p>
+                </div>
+
+                <div class="canva-card p-3">
+                    <span class="text-[9px] font-black bg-red-100 text-red-900 px-2 py-0.5 rounded-full border border-red-900">02</span>
+                    <h4 class="slide-title-font text-[11px] font-bold text-blue-950 mt-1 mb-0.5">Sampel Sasar</h4>
+                    <p class="text-[8.5px] leading-relaxed text-slate-600 font-semibold">
+                        Melibatkan sampel 45 responden aktif mahasiswa Universitas Mikroskil sebagai representasi konsumen digital.
+                    </p>
+                </div>
+
+                <div class="canva-card p-3">
+                    <span class="text-[9px] font-black bg-amber-100 text-amber-900 px-2 py-0.5 rounded-full border border-amber-900">03</span>
+                    <h4 class="slide-title-font text-[11px] font-bold text-blue-950 mt-1 mb-0.5">Skala Likert</h4>
+                    <p class="text-[8.5px] leading-relaxed text-slate-600 font-semibold">
+                        Mengumpulkan data instrumen kuesioner terstruktur berskala Likert 1-5 (Sangat Tidak Setuju s.d Sangat Setuju).
+                    </p>
+                </div>
+
+                <div class="canva-card p-3">
+                    <span class="text-[9px] font-black bg-green-100 text-green-900 px-2 py-0.5 rounded-full border border-green-900">04</span>
+                    <h4 class="slide-title-font text-[11px] font-bold text-blue-950 mt-1 mb-0.5">Variabel Riset</h4>
+                    <p class="text-[8.5px] leading-relaxed text-slate-600 font-semibold">
+                        Menganalisis hubungan Wawasan Nusantara (Variabel X) dan Penguatan Nilai Tukar Rupiah (Variabel Y).
+                    </p>
+                </div>
+            </div>
+
+            <div class="relative z-10 flex justify-between items-end text-slate-800">
+                <div class="flex items-center gap-3">
+                    <div class="w-14 h-14 floating-maskot">
+                        <svg viewBox="0 0 150 150" class="w-full h-full">
+                            <use href="#smart-garuda" />
+                        </svg>
+                    </div>
+                    <div class="chat-bubble px-3 py-1 text-[9px] font-bold text-blue-900 border-2 border-blue-900 max-w-[280px]">
+                        Garuda: "Data kuantitatif empiris yang valid menjamin objektivitas riset kita!"
+                    </div>
+                </div>
+                <span class="text-[9px] text-slate-700 font-bold">Informatika / TI - Universitas Mikroskil</span>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 6: BAB IV HASIL PENELITIAN (DEMOGRAFI DENGAN PIE CHART INDAH) ==================== -->
+        <div class="slide-canvas" id="slide6" style="background: linear-gradient(to bottom, #dbeafe 0%, #eff6ff 60%, #eff6ff 100%);">
+            <!-- Background Ornamen Statistik & Gedung Mikroskil Minimalis -->
+            <div class="absolute inset-0 pointer-events-none z-0">
+                <svg class="w-full h-full" viewBox="0 0 1000 562" preserveAspectRatio="none">
+                    <path d="M 0,100 L 1000,100 M 0,200 L 1000,200 M 0,300 L 1000,300 M 0,400 L 1000,400 M 0,500 L 1000,500" stroke="#dbeafe" stroke-width="1.5" />
+                    <!-- Siluet Gedung Kampus Samping Kanan -->
+                    <path d="M 850,562 L 850,350 L 910,350 L 910,290 L 980,290 L 980,562 Z" fill="#93c5fd" opacity="0.3" />
+                </svg>
+            </div>
+
+            <div class="relative z-10 flex justify-between items-center text-slate-800">
+                <span class="slide-title-font text-[16px] font-bold bg-blue-900 text-white px-4 py-1 rounded-full shadow-sm">
+                    HASIL SEBARAN DEMOGRAFIS
+                </span>
+                <span class="text-[11px] font-semibold bg-red-600 text-white px-3 py-1 rounded-full shadow-sm">Slide 6 / 10</span>
+            </div>
+
+            <!-- Sebaran & Diagram Lingkaran Interaktif -->
+            <div class="relative z-10 grid grid-cols-2 gap-8 px-8 my-auto">
+                <div class="flex flex-col justify-center">
+                    <span class="text-[9px] font-bold text-red-600 uppercase tracking-widest block mb-1">Populasi Sasar (Klik Bagian Chart)</span>
+                    <h3 class="slide-title-font text-xl font-extrabold text-blue-950 mb-2">Dominasi Rumpun Informatika</h3>
+                    <p class="text-[10px] leading-relaxed text-slate-600 font-semibold mb-3">
+                        Mayoritas dari 45 responden yang mengumpulkan jawaban kuesioner berasal dari rumpun komputer / sistem informasi Universitas Mikroskil.
+                    </p>
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2 text-[9px] font-bold text-slate-700 cursor-pointer p-1 rounded hover:bg-blue-100 transition" onclick="clickChartSegment('Informatika', '73.33%')">
+                            <span class="w-3.5 h-3.5 rounded-md bg-blue-900 border border-slate-950 block"></span>
+                            <span>Informatika / Teknologi Informasi (73.33%)</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-[9px] font-bold text-slate-700 cursor-pointer p-1 rounded hover:bg-red-100 transition" onclick="clickChartSegment('Sistem Informasi', '8.89%')">
+                            <span class="w-3.5 h-3.5 rounded-md bg-red-500 border border-slate-950 block"></span>
+                            <span>Sistem Informasi (8.89%)</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-[9px] font-bold text-slate-700 cursor-pointer p-1 rounded hover:bg-amber-100 transition" onclick="clickChartSegment('Manajemen', '8.89%')">
+                            <span class="w-3.5 h-3.5 rounded-md bg-amber-400 border border-slate-950 block"></span>
+                            <span>Manajemen (8.89%)</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-[9px] font-bold text-slate-700 cursor-pointer p-1 rounded hover:bg-emerald-100 transition" onclick="clickChartSegment('Akuntansi', '2.22%')">
+                            <span class="w-3.5 h-3.5 rounded-md bg-emerald-500 border border-slate-950 block"></span>
+                            <span>Akuntansi (2.22%)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conic Gradient Pie Chart Interaktif -->
+                <div class="flex flex-col items-center justify-center">
+                    <div class="relative w-48 h-48 rounded-full border-4 border-blue-900 shadow-lg flex items-center justify-center cursor-pointer transform hover:rotate-12 transition duration-500" 
+                         style="background: conic-gradient(#1e3a8a 0% 73.33%, #ef4444 73.33% 82.22%, #fbbf24 82.22% 91.11%, #10b981 91.11% 100%);"
+                         onclick="clickChartSegment('Rumpun Gabungan', '100%')">
+                        <div class="w-28 h-28 rounded-full bg-white border-2 border-blue-900 flex flex-col items-center justify-center shadow-inner">
+                            <span class="slide-title-font text-2xl font-black text-blue-900" id="chartNum">45</span>
+                            <span class="text-[8px] font-extrabold text-slate-500 uppercase tracking-widest text-center" id="chartLabel">Responden</span>
+                        </div>
+                    </div>
+                    <span class="text-[10px] text-blue-900 font-extrabold mt-2 text-center" id="chartNotify">Klik bagian lingkaran untuk interaktivitas data.</span>
+                </div>
+            </div>
+
+            <div class="relative z-10 flex justify-between items-end">
+                <div class="flex items-center gap-3">
+                    <div class="w-14 h-14 floating-maskot">
+                        <svg viewBox="0 0 150 150" class="w-full h-full">
+                            <use href="#smart-garuda" />
+                        </svg>
+                    </div>
+                    <div class="chat-bubble px-3 py-1 text-[9px] font-bold text-blue-900 border-2 border-blue-900 max-w-[280px]">
+                        Garuda: "Rumpun komputer mendominasi, sangat cocok untuk analisis literasi digital!"
+                    </div>
+                </div>
+                <span class="text-[9px] text-slate-700 font-bold">Hasil Olah Data Primer 2026</span>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 7: BAB IV TABEL DISTRIBUSI JAWABAN (VIBES BLACKBOARD & TABEL INDAH) ==================== -->
+        <div class="slide-canvas" id="slide7" style="background: linear-gradient(to bottom, #cbd5e1 0%, #94a3b8 60%, #475569 100%);">
+            <!-- Background Frame Papan Tulis Kelas -->
+            <div class="absolute inset-0 pointer-events-none z-0">
+                <svg class="w-full h-full" viewBox="0 0 1000 562" preserveAspectRatio="none">
+                    <rect x="40" y="50" width="920" height="400" rx="15" fill="#0f172a" stroke="#1e293b" stroke-width="8" />
+                    <rect x="50" y="60" width="900" height="380" rx="8" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="8,8" />
+                </svg>
+            </div>
+
+            <div class="relative z-10 flex justify-between items-center text-slate-800">
+                <span class="slide-title-font text-[16px] font-bold bg-amber-400 text-slate-950 border-2 border-slate-950 px-4 py-1 rounded-full shadow-sm">
+                    DISTRIBUSI SKOR BUTIR INDIKATOR
+                </span>
+                <span class="text-[11px] font-semibold bg-blue-950 text-white px-3 py-1 rounded-full shadow-sm">Slide 7 / 10</span>
+            </div>
+
+            <!-- Tabel Canva Vektor -->
+            <div class="relative z-10 px-8 my-auto overflow-hidden">
+                <div class="border border-slate-700 rounded-xl overflow-hidden shadow-md">
+                    <table class="w-full text-left border-collapse bg-slate-900/90 text-slate-200">
+                        <thead>
+                            <tr class="bg-gradient-to-r from-blue-900 to-indigo-900 text-yellow-300 border-b border-slate-700 text-[10px] uppercase font-extrabold">
+                                <th class="p-2">Kode</th>
+                                <th class="p-2">Butir Pernyataan Sikap Ekonomi Siber</th>
+                                <th class="p-2 text-center">Positif (%)</th>
+                                <th class="p-2 text-center">Rerata</th>
+                                <th class="p-2 text-center">Kategori</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-[9px] font-semibold">
+                            <tr class="border-b border-slate-800/80 cursor-pointer hover:bg-slate-800" onclick="showRowInsight('B1: Lambang Kedaulatan', 'Persetujuan tinggi (93.33%) mencerminkan bahwa Rupiah bukan lagi sebatas kertas bayar harian, melainkan pilar harga diri kebangsaan.')">
+                                <td class="p-2 text-yellow-400">B1</td>
+                                <td class="p-2">Rupiah sebagai simbol identitas dan kedaulatan bangsa</td>
+                                <td class="p-2 text-center">93.33%</td>
+                                <td class="p-2 text-center">4.38</td>
+                                <td class="p-2 text-center"><span class="bg-green-900/50 text-green-400 px-2 py-0.5 rounded-full font-bold">Sangat Tinggi</span></td>
+                            </tr>
+                            <tr class="border-b border-slate-800/80 cursor-pointer hover:bg-slate-800" onclick="showRowInsight('B2: Tanggung Jawab Mahasiswa', 'Sikap (97.78%) yang luar biasa tinggi menunjukkan bahwa mahasiswa memandang pengamanan nilai Rupiah bukan sekadar tugas Bank Indonesia.')">
+                                <td class="p-2 text-yellow-400">B2</td>
+                                <td class="p-2">Tanggung jawab mahasiswa memelihara nilai Rupiah</td>
+                                <td class="p-2 text-center">97.78%</td>
+                                <td class="p-2 text-center">4.53</td>
+                                <td class="p-2 text-center"><span class="bg-green-900/50 text-green-400 px-2 py-0.5 rounded-full font-bold">Sangat Tinggi</span></td>
+                            </tr>
+                            <tr class="border-b border-slate-800/80 cursor-pointer hover:bg-slate-800" onclick="showRowInsight('B4: Kepercayaan Ekonomi', 'Rerata tertinggi 4.60 membuktikan literasi tinggi mahasiswa mengenai hubungan stabilitas moneter dalam mendatangkan investasi siber.')">
+                                <td class="p-2 text-yellow-400">B4</td>
+                                <td class="p-2">Korelasi stabilitas rupiah dengan kepercayaan investasi siber</td>
+                                <td class="p-2 text-center">93.33%</td>
+                                <td class="p-2 text-center font-bold text-green-400">4.60</td>
+                                <td class="p-2 text-center"><span class="bg-blue-900/50 text-blue-400 px-2 py-0.5 rounded-full font-bold">Skor Tertinggi</span></td>
+                            </tr>
+                            <tr class="border-b border-slate-800/80 cursor-pointer hover:bg-slate-800" onclick="showRowInsight('B5: Kecintaan Produk Lokal', 'Menghubungkan konsumsi lokal dengan Wawasan Nusantara memicu persentase positif 97.78% yang sangat menggembirakan.')">
+                                <td class="p-2 text-yellow-400">B5</td>
+                                <td class="p-2">Kecintaan produk lokal representasi Wawasan Nusantara</td>
+                                <td class="p-2 text-center">97.78%</td>
+                                <td class="p-2 text-center">4.56</td>
+                                <td class="p-2 text-center"><span class="bg-green-900/50 text-green-400 px-2 py-0.5 rounded-full font-bold">Sangat Tinggi</span></td>
+                            </tr>
+                            <tr class="cursor-pointer hover:bg-slate-800" onclick="showRowInsight('B9: Preferensi Pembayaran Lokal', 'Skor terendah 4.22 merupakan alarm bahwa kenyamanan UX platform pembayaran global terkadang mengesampingkan pilar nasionalisme.')">
+                                <td class="p-2 text-yellow-400">B9</td>
+                                <td class="p-2">Preferensi platform transaksional digital berbasis Rupiah</td>
+                                <td class="p-2 text-center">77.78%</td>
+                                <td class="p-2 text-center font-bold text-yellow-500">4.22</td>
+                                <td class="p-2 text-center"><span class="bg-yellow-900/50 text-yellow-400 px-2 py-0.5 rounded-full font-bold">Skor Terendah</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Interactivity Insight Panel -->
+                <p id="tableInsightBox" class="text-yellow-300 text-center text-[10px] font-bold mt-1.5 h-6 overflow-hidden">
+                    Rerata Skor Agregat: <span class="text-white">4.40</span> dari 5.00 (Kategori: <span class="text-green-400">Sangat Tinggi</span>) - *Klik baris untuk insight mendalam*
+                </p>
+            </div>
+
+            <div class="relative z-10 flex justify-between items-end">
+                <div class="flex items-center gap-3">
+                    <div class="w-14 h-14 floating-maskot">
+                        <svg viewBox="0 0 150 150" class="w-full h-full">
+                            <use href="#smart-garuda" />
+                        </svg>
+                    </div>
+                    <div class="chat-bubble px-3 py-1 text-[9px] font-bold text-blue-900 border-2 border-blue-900 max-w-[280px]">
+                        Garuda: "B4 mencatatkan rerata tertinggi, tetapi B9 terendah. Di situlah letak temuan pentingnya!"
+                    </div>
+                </div>
+                <span class="text-[9px] text-white font-bold">Tabel Distribusi Skor • 2026</span>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 8: BAB IV DISKUSI KRITIS (ILUSTRASI JEMBATAN KELAS / GAP) ==================== -->
+        <div class="slide-canvas" id="slide8" style="background: linear-gradient(to bottom, #fef08a 0%, #fef9c3 60%, #fef9c3 100%);">
+            <!-- Background Visual Jembatan Terputus -->
+            <div class="absolute inset-0 pointer-events-none z-0">
+                <svg class="w-full h-full" viewBox="0 0 1000 562" preserveAspectRatio="none">
+                    <!-- Jembatan Kiri -->
+                    <path d="M 0,430 L 350,430 L 250,562 L 0,562 Z" fill="#b45309" stroke="#78350f" stroke-width="3" />
+                    <!-- Jembatan Kanan -->
+                    <path d="M 650,430 L 1000,430 L 1000,562 L 750,562 Z" fill="#b45309" stroke="#78350f" stroke-width="3" />
+                    <!-- Air di bawah jembatan -->
+                    <path d="M 350,430 Q 500,390 650,430 L 750,562 L 250,562 Z" fill="#38bdf8" opacity="0.6" />
+                    <path d="M 350,430 Q 430,470 370,490" fill="none" stroke="#78350f" stroke-width="2" />
+                    <path d="M 650,430 Q 570,470 630,490" fill="none" stroke="#78350f" stroke-width="2" />
+                </svg>
+            </div>
+
+            <div class="relative z-10 flex justify-between items-center text-slate-800">
+                <span class="slide-title-font text-[16px] font-bold bg-red-600 text-white px-4 py-1 rounded-full shadow-sm">
+                    PEMBAHASAN & DISKUSI KRITIS
+                </span>
+                <span class="text-[11px] font-semibold bg-blue-950 text-white px-3 py-1 rounded-full shadow-sm">Slide 8 / 10</span>
+            </div>
+
+            <!-- Simulasi Interaktif Paradoks (Interactive Slider Gap) -->
+            <div class="relative z-10 grid grid-cols-2 gap-8 px-10 my-auto">
+                <div class="canva-card p-4 border-red-600">
+                    <div class="flex items-center gap-2 mb-2 text-red-600">
+                        <span class="text-xl"><i class="fa-solid fa-heart animate-pulse"></i></span>
+                        <h3 class="slide-title-font text-[14px] font-bold text-blue-950">Nasionalisme Konseptual (4.56)</h3>
+                    </div>
+                    <p class="text-[9px] leading-relaxed text-slate-700 font-semibold">
+                        Secara idealisme dan pemahaman teoretis, mahasiswa sepakat secara mutlak bahwa menjaga nilai kedaulatan Rupiah dan mencintai produk lokal adalah wujud kesadaran bela negara yang esensial.
+                    </p>
+                </div>
+
+                <!-- Slider Interaktif di Kanan -->
+                <div class="canva-card p-4 border-amber-500 bg-white/95 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1 text-amber-500">
+                            <span class="text-xl"><i class="fa-solid fa-triangle-exclamation"></i></span>
+                            <h3 class="slide-title-font text-[12px] font-bold text-blue-950">Simulasi Realitas Praktis (4.22)</h3>
+                        </div>
+                        <p class="text-[8.5px] text-slate-600 font-medium">
+                            Aktivitas digital harian di mana faktor kenyamanan dan UX platform global sering bersaing dengan idealisme kebangsaan.
+                        </p>
+                    </div>
+
+                    <!-- Interactive Slider Engine -->
+                    <div class="mt-2 bg-slate-100 p-2 rounded-xl border border-slate-300">
+                        <div class="flex justify-between text-[8px] font-bold text-slate-500 mb-1">
+                            <span>Utilitas Teknologi</span>
+                            <span>Nasionalisme Finansial</span>
+                        </div>
+                        <input type="range" min="1" max="100" value="35" class="w-full cursor-pointer accent-blue-900" id="gapSlider" oninput="updateGapSimulation(this.value)">
+                        <div class="text-center text-[9px] font-extrabold text-blue-900 mt-1" id="gapText">
+                            GAP Terdeteksi: <span class="text-red-600">Lebar (Dampak Globalisasi Tinggi)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative z-10 flex justify-between items-end">
+                <div class="flex items-center gap-3">
+                    <div class="w-14 h-14 floating-maskot">
+                        <svg viewBox="0 0 150 150" class="w-full h-full">
+                            <use href="#smart-garuda" />
+                        </svg>
+                    </div>
+                    <div class="chat-bubble px-3 py-1 text-[9px] font-bold text-blue-900 border-2 border-blue-900 max-w-[280px]">
+                        Garuda: "Ada gap nyata antara nilai ideal Wawasan Nusantara dengan kebiasaan digital kita!"
+                    </div>
+                </div>
+                <span class="text-[9px] text-slate-700 font-bold">Diskusi Kritis Hasil Temuan</span>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 9: BAB V SIMPULAN DUA PILAR (VIBES GERBANG PILAR TIANG) ==================== -->
+        <div class="slide-canvas" id="slide9" style="background: linear-gradient(to bottom, #fed7aa 0%, #ffedd5 60%, #ffedd5 100%);">
+            <!-- Background Pilar Monumen Nasional -->
+            <div class="absolute inset-0 pointer-events-none z-0">
+                <svg class="w-full h-full" viewBox="0 0 1000 562" preserveAspectRatio="none">
+                    <!-- Pilar Tiang Monumen Kiri -->
+                    <g fill="#94a3b8" stroke="#475569" stroke-width="2">
+                        <rect x="60" y="100" width="40" height="462" />
+                        <rect x="45" y="100" width="70" height="20" />
+                        <rect x="35" y="80" width="90" height="20" fill="#cbd5e1" />
+                    </g>
+                    <!-- Pilar Tiang Monumen Kanan -->
+                    <g fill="#94a3b8" stroke="#475569" stroke-width="2">
+                        <rect x="900" y="100" width="40" height="462" />
+                        <rect x="885" y="100" width="70" height="20" />
+                        <rect x="875" y="80" width="90" height="20" fill="#cbd5e1" />
+                    </g>
+                </svg>
+            </div>
+
+            <div class="relative z-10 flex justify-between items-center text-slate-800">
+                <span class="slide-title-font text-[16px] font-bold bg-blue-900 text-white px-4 py-1 rounded-full shadow-sm">
+                    SIMPULAN AKHIR STUDI
+                </span>
+                <span class="text-[11px] font-semibold bg-red-600 text-white px-3 py-1 rounded-full shadow-sm">Slide 9 / 10</span>
+            </div>
+
+            <!-- Dua Pilar Simpulan Pokok (2 Masalah = 2 Kesimpulan) -->
+            <div class="relative z-10 grid grid-cols-2 gap-8 px-12 my-auto">
+                <div class="canva-card p-5 border-blue-900">
+                    <div class="flex items-center gap-2 mb-2 text-blue-900">
+                        <span class="text-xl"><i class="fa-solid fa-school"></i></span>
+                        <h3 class="slide-title-font text-[14px] font-bold">Pilar I: Idealisasi Konseptual</h3>
+                    </div>
+                    <p class="text-[9px] leading-relaxed text-slate-700 font-semibold">
+                        Mahasiswa Universitas Mikroskil terbukti memiliki pemahaman geopolitik siber yang matang dengan menempatkan penguatan nilai tukar Rupiah sebagai fondasi pertahanan bangsa (Skor Rerata: 4.40 - Sangat Tinggi).
+                    </p>
+                </div>
+
+                <div class="canva-card p-5 border-red-600">
+                    <div class="flex items-center gap-2 mb-2 text-red-600">
+                        <span class="text-xl"><i class="fa-solid fa-mobile-screen"></i></span>
+                        <h3 class="slide-title-font text-[14px] font-bold">Pilar II: Hambatan Praktis</h3>
+                    </div>
+                    <p class="text-[9px] leading-relaxed text-slate-700 font-semibold">
+                        Terdapat fenomena ambivalensi perilaku di ruang siber. Kenyamanan fungsional serta performa aplikasi keuangan global terbukti menjadi tantangan utama bagi kesadaran konsumsi platform pembayaran domestik (Skor B9: 4.22 - Terendah).
+                    </p>
+                </div>
+            </div>
+
+            <div class="relative z-10 flex justify-between items-end">
+                <div class="flex items-center gap-3">
+                    <div class="w-14 h-14 floating-maskot">
+                        <svg viewBox="0 0 150 150" class="w-full h-full">
+                            <use href="#smart-garuda" />
+                        </svg>
+                    </div>
+                    <div class="chat-bubble px-3 py-1 text-[9px] font-bold text-blue-900 border-2 border-blue-900 max-w-[280px]">
+                        Garuda: "Dua simpulan ini menjawab tuntas seluruh rumusan masalah riset kita!"
+                    </div>
+                </div>
+                <span class="text-[9px] text-slate-700 font-bold">Kesimpulan Presisi Sesuai Arahan</span>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 10: BAB V & VI SARAN DAN PENUTUP (ILUSTRASI KAMPUS SORE HARI) ==================== -->
+        <div class="slide-canvas" id="slide10" style="background: linear-gradient(to bottom, #fdba74 0%, #f97316 60%, #c2410c 100%);">
+            <!-- Background Sunset Kampus Universitas Mikroskil -->
+            <div class="absolute inset-0 pointer-events-none z-0">
+                <svg class="w-full h-full" viewBox="0 0 1000 562" preserveAspectRatio="none">
+                    <!-- Matahari Senja Merona -->
+                    <circle cx="500" cy="350" r="140" fill="#fef08a" opacity="0.6" />
+                    <!-- Bukit-Bukit Lembayung -->
+                    <path d="M 0,430 Q 250,390 500,430 T 1000,430 L 1000,562 L 0,562 Z" fill="#ea580c" opacity="0.7" />
+                    <path d="M 0,480 Q 300,450 600,480 T 1000,480 L 1000,562 L 0,562 Z" fill="#9a3412" />
+                </svg>
+            </div>
+
+            <div class="relative z-10 flex justify-between items-center text-white">
+                <span class="slide-title-font text-[16px] font-bold bg-amber-400 text-slate-950 border-2 border-slate-950 px-4 py-1 rounded-full shadow-sm">
+                    REKOMENDASI & PENUTUP DOKUMEN
+                </span>
+                <img src="Lambang Mikroskil.png" alt="Mikroskil Shield" class="h-10 object-contain drop-shadow" onerror="this.src='https://placehold.co/100x100/003399/ffffff?text=Mikroskil+Shield'">
+            </div>
+
+            <!-- 3 Solusi Saran Aplikatif Strategis -->
+            <div class="relative z-10 grid grid-cols-3 gap-4 px-4 my-auto">
+                <div class="canva-card p-4">
+                    <div class="text-2xl text-blue-900 mb-1"><i class="fa-solid fa-graduation-cap"></i></div>
+                    <h4 class="slide-title-font text-[12px] font-bold text-blue-950 mb-0.5">Integrasi Silabus</h4>
+                    <p class="text-[8.5px] leading-relaxed text-slate-700 font-semibold">
+                        Memasukkan studi kasus literasi keuangan siber ke dalam silabus mata kuliah Pengembangan Karakter Kewarganegaraan Mikroskil.
+                    </p>
+                </div>
+
+                <div class="canva-card p-4">
+                    <div class="text-2xl text-red-600 mb-1"><i class="fa-solid fa-laptop-code"></i></div>
+                    <h4 class="slide-title-font text-[12px] font-bold text-blue-950 mb-0.5">Optimasi UX Lokal</h4>
+                    <p class="text-[8.5px] leading-relaxed text-slate-700 font-semibold">
+                        Mendorong developer lokal merekayasa kegunaan serta performa aplikasi pembayaran agar kompetitif bagi kebutuhan mahasiswa.
+                    </p>
+                </div>
+
+                <div class="canva-card p-4">
+                    <div class="text-2xl text-amber-500 mb-1"><i class="fa-solid fa-users"></i></div>
+                    <h4 class="slide-title-font text-[12px] font-bold text-blue-950 mb-0.5">Terima Kasih!</h4>
+                    
+                </div>
+            </div>
+
+            <div class="relative z-10 flex justify-between items-end text-white">
+                <div class="flex items-center gap-3">
+                    <div class="w-14 h-14 floating-maskot">
+                        <svg viewBox="0 0 150 150" class="w-full h-full">
+                            <use href="#smart-garuda" />
+                        </svg>
+                    </div>
+                    <div class="chat-bubble px-3 py-1 text-[9px] font-bold text-blue-900 border-2 border-blue-900 max-w-[280px]">
+                        Garuda: "Semoga presentasi kelompok 1 mendapat nilai A ya, teman-teman!"
+                    </div>
+                </div>
+                <span class="text-[9px] text-yellow-100 font-bold">Universitas Mikroskil • IFC SORE</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ==================== TATA LETAK PANEL NAVIGASI UTAMA (STICKY CONTROLLER) ==================== -->
+    <div class="flex flex-col items-center gap-2 mt-4 z-50 w-full max-w-[1120px]">
+        <!-- Bullets Halaman Aktif -->
+        <div class="flex gap-2.5">
+            <div class="dot-indicator active" onclick="jumpToSlide(1)"></div>
+            <div class="dot-indicator" onclick="jumpToSlide(2)"></div>
+            <div class="dot-indicator" onclick="jumpToSlide(3)"></div>
+            <div class="dot-indicator" onclick="jumpToSlide(4)"></div>
+            <div class="dot-indicator" onclick="jumpToSlide(5)"></div>
+            <div class="dot-indicator" onclick="jumpToSlide(6)"></div>
+            <div class="dot-indicator" onclick="jumpToSlide(7)"></div>
+            <div class="dot-indicator" onclick="jumpToSlide(8)"></div>
+            <div class="dot-indicator" onclick="jumpToSlide(9)"></div>
+            <div class="dot-indicator" onclick="jumpToSlide(10)"></div>
+        </div>
+
+        <!-- Tombol Kontrol Halaman -->
+        <div class="flex gap-3">
+            <button class="px-6 py-2 bg-gradient-to-r from-red-600 to-red-700 text-white font-extrabold rounded-full border border-white shadow hover:brightness-110 active:scale-95 transition flex items-center gap-2 text-[11px]" onclick="prevSlide()">
+                <i class="fa-solid fa-chevron-left"></i> SEBELUMNYA
+            </button>
+            <button class="px-6 py-2 bg-gradient-to-r from-blue-900 to-indigo-900 text-white font-extrabold rounded-full border border-white shadow hover:brightness-110 active:scale-95 transition flex items-center gap-2 text-[11px]" onclick="nextSlide()">
+                SELANJUTNYA <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- SCRIPT NAVIGASI CONTROLLER -->
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 10;
+
+        // Custom Web Audio API Synth Sound Generator (Zero external file dependencies)
+        let audioCtx = null;
+        function playBeep(frequency = 350, duration = 0.08, type = 'sine') {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                
+                osc.type = type;
+                osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+                
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {
+                console.log("Audio not supported yet.");
+            }
+        }
+
+        // Fungsi mengubah halaman slide
+        function showSlide(index) {
+            if (index < 1 || index > totalSlides) return;
+
+            // Mainkan sound transition
+            playBeep(440, 0.08, 'triangle');
+
+            // Sembunyikan halaman aktif saat ini
+            document.querySelector('.slide-canvas.active').classList.remove('active');
+
+            // Tampilkan halaman slide baru
+            document.getElementById(`slide${index}`).classList.add('active');
+
+            // Perbarui indikator titik
+            const indicators = document.querySelectorAll('.dot-indicator');
+            indicators.forEach((dot, idx) => {
+                if (idx === index - 1) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+
+            currentSlide = index;
+        }
+
+        // Lompat langsung ke slide tertentu (jika diklik indikator bulat)
+        function jumpToSlide(index) {
+            showSlide(index);
+        }
+
+        // Fungsi navigasi tombol selanjutnya
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                showSlide(currentSlide + 1);
+            } else {
+                showSlide(1); // Melingkar kembali ke cover setelah slide terakhir habis
+            }
+        }
+
+        // Fungsi navigasi tombol sebelumnya
+        function prevSlide() {
+            if (currentSlide > 1) {
+                showSlide(currentSlide - 1);
+            } else {
+                showSlide(totalSlides); // Ke slide terakhir jika berada di cover
+            }
+        }
+
+        // Dukungan navigasi menggunakan tombol panah keyboard kiri dan kanan
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight') {
+                nextSlide();
+            } else if (event.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
+
+        // Dukungan swipe gestures untuk layar sentuh
+        let touchstartX = 0;
+        let touchendX = 0;
+        const gestureZone = document.querySelector('.slide-wrapper');
+
+        gestureZone.addEventListener('touchstart', function(event) {
+            touchstartX = event.changedTouches[0].screenX;
+        }, false);
+
+        gestureZone.addEventListener('touchend', function(event) {
+            touchendX = event.changedTouches[0].screenX;
+            handleGesture();
+        }, false);
+
+        function handleGesture() {
+            if (touchendX < touchstartX - 50) {
+                nextSlide(); // swipe kiri -> slide selanjutnya
+            }
+            if (touchendX > touchstartX + 50) {
+                prevSlide(); // swipe kanan -> slide sebelumnya
+            }
+        }
+
+        // INTERAKTIVITAS SLIDE 4: Detail pilar teori pustaka
+        function showTeoriDetail(title, desc) {
+            playBeep(320, 0.12, 'sine');
+            const box = document.getElementById('teoriDetailBox');
+            box.classList.remove('hidden');
+            box.innerHTML = `<strong class="text-blue-900">${title}:</strong> ${desc}`;
+        }
+
+        // INTERAKTIVITAS SLIDE 6: Klik segmen grafik demografi
+        function clickChartSegment(segmentName, percentage) {
+            playBeep(400, 0.08, 'triangle');
+            const numEl = document.getElementById('chartNum');
+            const labelEl = document.getElementById('chartLabel');
+            const notifyEl = document.getElementById('chartNotify');
+            
+            if (segmentName === 'Rumpun Gabungan') {
+                numEl.innerText = "45";
+                labelEl.innerText = "Responden";
+                notifyEl.innerText = "Diagram lingkaran sebaran rumpun sasar kuesioner.";
+            } else {
+                numEl.innerText = percentage;
+                labelEl.innerText = segmentName;
+                notifyEl.innerHTML = `Terseleksi: <span class="text-red-600 font-extrabold">${segmentName} (${percentage})</span>`;
+            }
+        }
+
+        // INTERAKTIVITAS SLIDE 7: Klik baris tabel untuk insight tabel
+        function showRowInsight(title, text) {
+            playBeep(350, 0.1, 'sine');
+            const box = document.getElementById('tableInsightBox');
+            box.innerHTML = `<span class="text-yellow-300 font-black">${title}:</span> <span class="text-white">${text}</span>`;
+        }
+
+        // INTERAKTIVITAS SLIDE 8: Update simulasi slider gap
+        function updateGapSimulation(val) {
+            playBeep(200 + (val * 2), 0.02, 'sine');
+            const gapText = document.getElementById('gapText');
+            if (val < 30) {
+                gapText.innerHTML = `GAP Terdeteksi: <span class="text-red-600 font-extrabold">Lebar Sekali (Globalisasi Sangat Dominan)</span>`;
+            } else if (val >= 30 && val < 70) {
+                gapText.innerHTML = `GAP Terdeteksi: <span class="text-yellow-600 font-extrabold">Sedang (Ada Tarikan Antara UX & Nasionalisme)</span>`;
+            } else {
+                gapText.innerHTML = `GAP Terdeteksi: <span class="text-green-600 font-extrabold">Sempit (Nasionalisme Menang Mutlak)</span>`;
+            }
+        }
+    </script>
+</body>
+</html>
